@@ -71,11 +71,17 @@ class MyScraper(object):
 
 if __name__ == '__main__':
     scrape_queue.put(me.id)
+    print("Scraping is starting")
     while not scrape_queue.empty():
-        id = scrape_queue.get()
-        scraper = MyScraper(id)
-        scraper.scrape()
-        scraper.get_tweets()
-        scraper.get_followers()
-        scraper.get_following()
-        scraped_profiles[id] = True
+        try:
+            id = scrape_queue.get()
+            scraper = MyScraper(id)
+            scraper.scrape()
+            scraper.get_tweets()
+            scraper.get_followers()
+            scraper.get_following()
+            scraped_profiles[id] = True
+            print("Done with {}".format(id))
+        except Exception as ex:
+            print("Error: {}".format(ex))
+    print("Finished scraping")
