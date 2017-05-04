@@ -1,0 +1,151 @@
+{# This simple template derives from ``base.html``. See ``base.html`` for
+more information about template inheritance. #}
+{%- extends "base.html" %}
+
+{# Loads some of the macros included with Flask-Bootstrap. We are using the
+utils module here to automatically render Flask's flashed messages in a
+bootstrap friendly manner #}
+{% import "bootstrap/utils.html" as utils %}
+
+{# Inside the ``content`` is where you should place most of your own stuff.
+This will keep scripts at the page end and a navbar you add on later
+intact. #}
+{% block content %}
+<div class="container">
+    {%- with messages = get_flashed_messages(with_categories=True) %}
+    {%- if messages %}
+    <div class="row">
+        <div class="col-md-12">
+            {{utils.flashed_messages(messages)}}
+        </div>
+    </div>
+    {%- endif %}
+    {%- endwith %}
+</div>
+
+<!-- Search Bar -->
+<div class="container" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+        <form action="" method="post">
+            <div class="col-md-10">
+                <input class="form-control" type="text" placeholder="Profile name">
+            </div>
+            <div class="col-md-2">
+                <input class="btn btn-primary" type="submit" value="Search">
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-md-4">
+            <img height="300" src="{{ url_for('static', filename='images/no-photo.jpg') }}">
+        </div>
+
+        <div class="col-md-8">
+            <h2>Basic Information</h2>
+            <div class="col-md-2">
+                <div class="row"><label>Name:</label></div>
+                <div class="row"><label>Birthday:</label></div>
+                <div class="row"><label>Gender:</label></div>
+                <div class="row"><label>Social status:</label></div>
+                <div class="row"><label>Address:</label></div>
+                <div class="row"><label>Country:</label></div>
+                <div class="row"><label>Phone number:</label></div>
+                <div class="row"><label>E-mail:</label></div>
+            </div>
+            <div class="col-md-10">
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+                <div class="row"><label>Something</label></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Professional</h2>
+            <div class="col-md-6">
+                <div class="row"><label>Education:</label></div>
+                <div class="row"><label>Current job:</label></div>
+                <div class="row"><label>Previous jobs:</label></div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="row"><label>-</label></div>
+                    <div class="row"><label>-</label></div>
+                    <div class="row"><label>-</label></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <h2>Interests</h2>
+            <div class="col-md-6">
+                <div class="row"><label>Music:</label></div>
+                <div class="row"><label>Favorite Movies:</label></div>
+                <div class="row"><label>Hobbies</label></div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row"><label>-</label></div>
+                <div class="row"><label>-</label></div>
+                <div class="row"><label>-</label></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h2>Social Network</h2>
+            <div class="col-md-6">
+                <div class="row"><label>Networks used:</label></div>
+                <div class="row"><label>Page Rank:</label></div>
+                <div class="row"><label>Groups:</label></div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row"><label>-</label></div>
+                <div class="row"><label>-</label></div>
+                <div class="row"><label>-</label></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Personal Photos</h3>
+            <div class="row text-center">None</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Personal Videos</h3>
+            <div class="row text-center">None</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Social media posts</h3>
+            <div class="row text-center">None</div>
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2017 Silverbaq</p>
+    </footer>
+</div> <!-- /container -->
+
+
+{%- endblock %}

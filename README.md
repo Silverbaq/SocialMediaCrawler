@@ -35,20 +35,20 @@ For the project, it is needed to have some data for mining. The crawler will gat
 
  
 ### Information Criteria
-* Basic informations
+* Basic information
 	* Name
 	* Birthday
 	* Gender
 	* Social status
 	* Address
-	* Contry
+	* Country
 	* Phone number
 	* E-mail
-* Profesional informations
+* Professional information
 	* Education
 	* Current job
 	* Previous jobs
-* Interrests
+* Interests
 	* Music
 	* Favorite Movies
 	* Hobbies
@@ -56,8 +56,9 @@ For the project, it is needed to have some data for mining. The crawler will gat
 	* Networks used
 	* Page Rank
 	* Groups
-* Others
+* Other
 	* Personal Photos
 	* Personal Videos
+	* Social media posts
 
 
