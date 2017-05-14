@@ -86,9 +86,6 @@ def write_wiki_data(data):
 
 
 if __name__ == "__main__":
-    wiki_content('Steve Wozniak', '22938914')
-
-    '''
     for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
@@ -96,4 +93,3 @@ if __name__ == "__main__":
             print 'Done with: {}'.format(l[1])
         except Exception as ex:
             print '{} failed: {}'.format(l[1], ex)
-    '''
