@@ -46,7 +46,12 @@ def wiki_web_query(name, page_id):
                 if t.name.matches("birth_date"):
                     b_day = mwparserfromhell.parse(t.value).get(1)
                     tmp = b_day.params
-                    birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                    if tmp[0].name.nodes[0] == 'mf':
+                        birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                    elif tmp[0].name.nodes[0] == 'df':
+                        birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                    else:
+                        birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
                 elif t.name.matches("death_date"):
                     d_day = mwparserfromhell.parse(t.value).get(1)
                     tmp = d_day.params
@@ -81,6 +86,9 @@ def write_wiki_data(data):
 
 
 if __name__ == "__main__":
+    wiki_content('Steve Wozniak', '22938914')
+
+    '''
     for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
@@ -88,3 +96,4 @@ if __name__ == "__main__":
             print 'Done with: {}'.format(l[1])
         except Exception as ex:
             print '{} failed: {}'.format(l[1], ex)
+    '''
