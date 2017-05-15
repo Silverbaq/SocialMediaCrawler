@@ -55,6 +55,10 @@ def wiki_web_query(name, page_id):
                             birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
                         else:
                             birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                elif t.name.matches("foundation"):
+                    f_day = mwparserfromhell.parse(t.value).get(1)
+                    tmp = f_day.params
+                    birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
                 elif t.name.matches("death_date"):
                     try:
                         d_day = mwparserfromhell.parse(t.value).get(1)
@@ -74,6 +78,9 @@ def wiki_web_query(name, page_id):
                                         occupation.append(str(j.title))
                                     elif isinstance(j, mwparserfromhell.wikicode.Text) and len(str(j.value)) > 1:
                                         occupation.append(str(j.value).strip())
+                        if isinstance(i, mwparserfromhell.wikicode.Wikilink):
+                            occupation.append(str(i.title).strip())
+
                 elif t.name.matches("spouse"):
                     spouse = []
                     for i in t.value.nodes:
@@ -111,10 +118,6 @@ def write_wiki_data(data):
 
 
 if __name__ == "__main__":
-    #wiki_content('Nicki Minaj', 35787166)
-    #wiki_content('Martin Fowler', 16665197)
-    #wiki_content('Steve Wozniak', 22938914)
-
     for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
