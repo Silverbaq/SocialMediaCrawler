@@ -11,15 +11,14 @@ def wiki_content(name, id):
         page_id = str(page.pageid)
         name = str(page.title)
 
-        result = wiki_web_query(name, page_id)
-        result['id'] = id
-        result['name'] = name
-        #result['content'] = page.content
-        #result['images'] = page.images
-        #result['refs'] = page.references
-        #result['wiki_url'] = page.url
+        basic_result = wiki_web_query(name, page_id)
+        basic_result['id'] = id
+        basic_result['name'] = name
 
-        write_wiki_data(json.dumps(result))
+        addition_result = {'id': id, 'content': page.content, 'images': page.images, 'refs': page.references,
+                           'wiki_url': page.url}
+
+        write_wiki_data(json.dumps(basic_result), json.dumps(addition_result))
 
 
 def wiki_web_query(name, page_id):
@@ -112,12 +111,20 @@ def wiki_web_query(name, page_id):
     }
 
 
-def write_wiki_data(data):
-    f = open("output/wiki_output.txt", "a+")
-    f.write(data + '\n')
+def write_wiki_data(basic, addition):
+    fb = open("output/wiki_basic_output.txt", "a+")
+    fb.write(basic + '\n')
+
+    fa = open("output/wiki_addition_output.txt", "a+")
+    fa.write(addition + '\n')
 
 
 if __name__ == "__main__":
+    #wiki_content('Nicki Minaj', 35787166)
+    #wiki_content('Martin Fowler', 16665197)
+    #wiki_content('Steve Wozniak', 22938914)
+    #wiki_content('Google', 2916305152)
+
     for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
