@@ -42,22 +42,29 @@ def wiki_web_query(name, page_id):
     for template in wikicode.filter_templates():
         if "Infobox" in str(template.name):
             for t in template.params:
+
                 if t.name.matches("birth_date"):
-                    b_day = mwparserfromhell.parse(t.value).get(1)
-                    tmp = b_day.params
-                    if len(tmp) == 1:
-                        birthday = '{}'.format(tmp[0])
-                    else:
-                        if tmp[0].name.nodes[0] == 'mf':
-                            birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
-                        elif tmp[0].name.nodes[0] == 'df':
-                            birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                    try:
+                        b_day = mwparserfromhell.parse(t.value).get(1)
+                        tmp = b_day.params
+                        if len(tmp) == 1:
+                            birthday = '{}'.format(tmp[0])
                         else:
-                            birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                            if tmp[0].name.nodes[0] == 'mf':
+                                birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                            elif tmp[0].name.nodes[0] == 'df':
+                                birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                            else:
+                                birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                    except:
+                        birthday = ''
                 elif t.name.matches("foundation"):
-                    f_day = mwparserfromhell.parse(t.value).get(1)
-                    tmp = f_day.params
-                    birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                    try:
+                        f_day = mwparserfromhell.parse(t.value).get(1)
+                        tmp = f_day.params
+                        birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                    except:
+                        birthday = ''
                 elif t.name.matches("death_date"):
                     try:
                         d_day = mwparserfromhell.parse(t.value).get(1)
@@ -66,39 +73,53 @@ def wiki_web_query(name, page_id):
                     except:
                         death = ''
                 elif t.name.matches("occupation"):
-                    occupation = []
-                    for i in t.value.nodes:
-                        if isinstance(i, mwparserfromhell.wikicode.Text) and len(str(i)) > 1:
-                            occupation = [job.strip() for job in str(i).split(',')]
-                        if isinstance(i, mwparserfromhell.wikicode.Template):
-                            for k in i.params:
-                                for j in k.value.nodes:
-                                    if isinstance(j, mwparserfromhell.wikicode.Wikilink):
-                                        occupation.append(str(j.title))
-                                    elif isinstance(j, mwparserfromhell.wikicode.Text) and len(str(j.value)) > 1:
-                                        occupation.append(str(j.value).strip())
-                        if isinstance(i, mwparserfromhell.wikicode.Wikilink):
-                            occupation.append(str(i.title).strip())
-
+                    try:
+                        occupation = []
+                        for i in t.value.nodes:
+                            if isinstance(i, mwparserfromhell.wikicode.Text) and len(str(i)) > 1:
+                                occupation = [job.strip() for job in str(i).split(',')]
+                            if isinstance(i, mwparserfromhell.wikicode.Template):
+                                for k in i.params:
+                                    for j in k.value.nodes:
+                                        if isinstance(j, mwparserfromhell.wikicode.Wikilink):
+                                            occupation.append(str(j.title))
+                                        elif isinstance(j, mwparserfromhell.wikicode.Text) and len(str(j.value)) > 1:
+                                            occupation.append(str(j.value).strip())
+                            if isinstance(i, mwparserfromhell.wikicode.Wikilink):
+                                occupation.append(str(i.title).strip())
+                    except:
+                        occupation = []
                 elif t.name.matches("spouse"):
-                    spouse = []
-                    for i in t.value.nodes:
-                        if isinstance(i, mwparserfromhell.wikicode.Template):
-                            for k in i.params:
-                                for j in k.value.nodes:
-                                    if isinstance(j, mwparserfromhell.wikicode.Template):
-                                        marage = {
-                                            'title': str(j.name)
-                                        }
-                                        for num,m in enumerate(j.params):
-                                            marage[str(num)] = str(m)
-                                        spouse.append(marage)
+                    try:
+                        spouse = []
+                        for i in t.value.nodes:
+                            if isinstance(i, mwparserfromhell.wikicode.Template):
+                                for k in i.params:
+                                    for j in k.value.nodes:
+                                        if isinstance(j, mwparserfromhell.wikicode.Template):
+                                            marage = {
+                                                'title': str(j.name)
+                                            }
+                                            for num,m in enumerate(j.params):
+                                                marage[str(num)] = str(m)
+                                            spouse.append(marage)
+                    except:
+                        spouse = []
                 elif t.name.matches("children"):
-                    children = str(t.value.nodes[0].split(',')[0]).strip()
+                    try:
+                        children = str(t.value.nodes[0].split(',')[0]).strip()
+                    except:
+                        children = ''
                 elif t.name.matches("mother"):
-                    mother = str(t.value.nodes[1].text)
+                    try:
+                        mother = str(t.value.nodes[1].text)
+                    except:
+                        mother = ''
                 elif t.name.matches("father"):
-                    father = str(t.value.nodes[1].text)
+                    try:
+                        father = str(t.value.nodes[1].text)
+                    except:
+                        father = ''
 
     return {
         "birthday": birthday,
@@ -120,11 +141,6 @@ def write_wiki_data(basic, addition):
 
 
 if __name__ == "__main__":
-    #wiki_content('Nicki Minaj', 35787166)
-    #wiki_content('Martin Fowler', 16665197)
-    #wiki_content('Steve Wozniak', 22938914)
-    #wiki_content('Google', 2916305152)
-
     for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
