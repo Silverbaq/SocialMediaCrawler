@@ -20,6 +20,10 @@ Copy 'profiles.txt' from the Twitter collector into the input folder.
 
 Or make a file named 'profiles.txt', and let the content have an ID at index 0 and profile name at index 1.  
 
+Execute script with:
+``` 
+python wiki_collector.py
+```
 ### Output
 * ['id'] = Twitter id
 * ['name'] = Person Name

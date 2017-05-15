@@ -14,10 +14,10 @@ def wiki_content(name, id):
         result = wiki_web_query(name, page_id)
         result['id'] = id
         result['name'] = name
-        result['content'] = page.content
-        result['images'] = page.images
-        result['refs'] = page.references
-        result['wiki_url'] = page.url
+        #result['content'] = page.content
+        #result['images'] = page.images
+        #result['refs'] = page.references
+        #result['wiki_url'] = page.url
 
         write_wiki_data(json.dumps(result))
 
@@ -41,29 +41,54 @@ def wiki_web_query(name, page_id):
     # Parsing data
     wikicode = mwparserfromhell.parse(data)
     for template in wikicode.filter_templates():
-        if template.name.matches("Infobox person") and not template.has("date"):
+        if "Infobox" in str(template.name):
             for t in template.params:
                 if t.name.matches("birth_date"):
                     b_day = mwparserfromhell.parse(t.value).get(1)
                     tmp = b_day.params
-                    if tmp[0].name.nodes[0] == 'mf':
-                        birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
-                    elif tmp[0].name.nodes[0] == 'df':
-                        birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                    if len(tmp) == 1:
+                        birthday = '{}'.format(tmp[0])
                     else:
-                        birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                        if tmp[0].name.nodes[0] == 'mf':
+                            birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                        elif tmp[0].name.nodes[0] == 'df':
+                            birthday = '{}-{}-{}'.format(tmp[1], tmp[2], tmp[3])
+                        else:
+                            birthday = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
                 elif t.name.matches("death_date"):
-                    d_day = mwparserfromhell.parse(t.value).get(1)
-                    tmp = d_day.params
-                    death = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                    try:
+                        d_day = mwparserfromhell.parse(t.value).get(1)
+                        tmp = d_day.params
+                        death = '{}-{}-{}'.format(tmp[0], tmp[1], tmp[2])
+                    except:
+                        death = ''
                 elif t.name.matches("occupation"):
-                    occupation = [str(s.replace('\n', '').strip()) for s in t.value.nodes[0].value.split(',')]
+                    occupation = []
+                    for i in t.value.nodes:
+                        if isinstance(i, mwparserfromhell.wikicode.Text) and len(str(i)) > 1:
+                            occupation = [job.strip() for job in str(i).split(',')]
+                        if isinstance(i, mwparserfromhell.wikicode.Template):
+                            for k in i.params:
+                                for j in k.value.nodes:
+                                    if isinstance(j, mwparserfromhell.wikicode.Wikilink):
+                                        occupation.append(str(j.title))
+                                    elif isinstance(j, mwparserfromhell.wikicode.Text) and len(str(j.value)) > 1:
+                                        occupation.append(str(j.value).strip())
                 elif t.name.matches("spouse"):
-                    status = str(t.value.nodes[1].name)
-                    s_name = str(t.value.nodes[1].params[0].value)
-                    spouse = [status, s_name]
+                    spouse = []
+                    for i in t.value.nodes:
+                        if isinstance(i, mwparserfromhell.wikicode.Template):
+                            for k in i.params:
+                                for j in k.value.nodes:
+                                    if isinstance(j, mwparserfromhell.wikicode.Template):
+                                        marage = {
+                                            'title': str(j.name)
+                                        }
+                                        for num,m in enumerate(j.params):
+                                            marage[str(num)] = str(m)
+                                        spouse.append(marage)
                 elif t.name.matches("children"):
-                    children = str(t.value.nodes[0].split(',')[0])
+                    children = str(t.value.nodes[0].split(',')[0]).strip()
                 elif t.name.matches("mother"):
                     mother = str(t.value.nodes[1].text)
                 elif t.name.matches("father"):
@@ -86,6 +111,10 @@ def write_wiki_data(data):
 
 
 if __name__ == "__main__":
+    #wiki_content('Nicki Minaj', 35787166)
+    #wiki_content('Martin Fowler', 16665197)
+    #wiki_content('Steve Wozniak', 22938914)
+
     for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
