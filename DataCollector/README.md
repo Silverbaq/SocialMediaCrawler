@@ -5,13 +5,23 @@ To be able to use the project, it is needed to collect some (a lot) of data for 
 The data collector i writen in python 3.5 and is using 'Scrapy' for the collecting data from the social medias. 
 
 ## Setup
+Make sure you have the needed applications:
+
+<strong> Ubuntu/Debian </strong>
+
+    sudo apt-get update
+    sudo apt-get install python3 python-pip virtualenv
+
 1. Make a virtual environment <br>
-``` Do someting ```
+``` virtualenv -p python3 venv ```
 
 2. Activate the virtual environment <br>
-``` Do something```
+``` source venv/bin/activate ```
 
-3. Install Scrapy <br> 
-``` pip install scrapy ```
+3. Install dependencies <br> 
+``` pip install -r requirements.txt ```
 
 ## Run
+<strong> Twitter
+
+``` python twitter/main.py```

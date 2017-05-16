@@ -41,3 +41,33 @@ python wiki_collector.py
 
 ## IMDB Collector
 ### Run
+Copy 'profiles.txt' from the Twitter collector into the input folder.
+
+Or make a file named 'profiles.txt', and let the content have an ID at index 0 and profile name at index 1.  
+
+Execute script with:
+``` 
+python imdb_collector.py
+```
+### Output
+Two files in output folder:
+
+* imdb_basic_output.txt
+```
+{
+    'id': String, <--- (twitter_id)
+    'name': String,
+    'occupation': List[String],
+    'birthday': String,
+    'death': String,
+    'spouse': List[String],
+    'children': Integer
+}
+```
+* imdb_content_output.txt
+```
+{
+    'id': String, <--- (twitter_id)
+    'content': String
+}  
+```
