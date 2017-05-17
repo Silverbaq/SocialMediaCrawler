@@ -28,4 +28,4 @@ Make sure you have the needed applications:
 ``` pip install -r requirements.txt ```
 
 ## Run
-Both the Twitter and the DataCollector has it's own README that will describe how to run the script.
+Both the Twitter and the InfoCollector has it's own README that will describe how to run the script.
