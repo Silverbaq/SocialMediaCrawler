@@ -19,10 +19,9 @@ The goal was to make a webscraper that could harvest information from social med
 
 ### Social Media Crawler
 For the project, it is needed to have some data for mining. The crawler will gather information from:
-* Facebook
 * Twitter
-* LinkedIn
-* Instagram
+* Wikipedia
+* IMDB
 
 ### Client Tool (Web App)
 -- Information Coming --
@@ -37,28 +36,20 @@ For the project, it is needed to have some data for mining. The crawler will gat
 ### Information Criteria
 * Basic information
 	* Name
-	* Birthday
-	* Gender
-	* Social status
-	* Address
-	* Country
-	* Phone number
-	* E-mail
+	* Birthday (and death)
+	* Parents
+	* Children
+	* Occupation
 * Professional information
-	* Education
+	* Social status
 	* Current job
 	* Previous jobs
-* Interests
-	* Music
-	* Favorite Movies
-	* Hobbies
+	* References
 * Social Network
-	* Networks used
 	* Page Rank
-	* Groups
+	* Twitter ID
 * Other
 	* Personal Photos
-	* Personal Videos
 	* Social media posts
 
 
