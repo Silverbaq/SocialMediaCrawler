@@ -10,7 +10,7 @@ Make sure you have the needed applications:
 <strong> Ubuntu/Debian </strong>
 
     sudo apt-get update
-    sudo apt-get install python3 python-pip virtualenv
+    sudo apt-get install python3 python-pip virtualenv sudo python-dev 
 
 1. Make a virtual environment <br>
 ``` virtualenv -p python3 venv ```
