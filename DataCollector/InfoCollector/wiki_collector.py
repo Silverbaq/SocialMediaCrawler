@@ -144,9 +144,7 @@ def write_wiki_data(basic, addition):
 
 
 if __name__ == "__main__":
-    l = ['348785149    Kevin Bacon']
-    #for line in open('input/profiles.txt', 'r'):
-    for line in l:
+    for line in open('input/profiles.txt', 'r'):
         l = line.split('    ')
         try:
             wiki_content(l[1].strip(), l[0].strip())
