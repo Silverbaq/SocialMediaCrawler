@@ -2,3 +2,5 @@ wikipedia
 IMDbPY
 imdbpie
 mwparserfromhell
+lxml
+six
