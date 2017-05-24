@@ -2,6 +2,14 @@
 
 ### Setup
 * Make virtualenv 
+```
+sudo apt-get install python-dev  \
+     build-essential libssl-dev libffi-dev \
+     libxml2-dev libxslt1-dev zlib1g-dev \
+     python-pip
+
+```
+
 
 ```  
 virtualenv -p /usr/bin/python2.7 venv
