@@ -2,7 +2,13 @@
 To be able to use the project, it is needed to collect some (a lot) of data for the system to do data mining with, so that it is possible to show the information's about a person that you wish.
 
 ## Intro
-The data collector i writen in python 3.5 and is using 'Scrapy' for the collecting data from the social medias. 
+The data collector(s) are written in python. Then are collecting data from three diffirent sources:
+
+* Twitter
+* Wikipedia
+* IMDB
+
+To begin with, it is needed to have a lot of data from Twitter, since the two others scrappers are based on the data and the people that have been found at Twitter. 
 
 ## Setup
 Make sure you have the needed applications:
@@ -22,6 +28,4 @@ Make sure you have the needed applications:
 ``` pip install -r requirements.txt ```
 
 ## Run
-<strong> Twitter
-
-``` python twitter/main.py```
+Both the Twitter and the InfoCollector has it's own README that will describe how to run the script.
