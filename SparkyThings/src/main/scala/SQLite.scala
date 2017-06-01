@@ -1,7 +1,6 @@
 import org.apache.spark.sql.SparkSession
-import scala.slick.session.Database
-import scala.slick.jdbc.StaticQuery
-import scala.slick.jdbc.meta.MTable
+import slick.jdbc.meta.MTable
+import slick.jdbc.SQLiteProfile.api._
 
 /**
   * Created by silverbaq on 5/17/17.
