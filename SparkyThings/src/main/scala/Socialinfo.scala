@@ -30,14 +30,19 @@ case class IMDBProfile(id: String, name: String, birthday: String, death: String
                        children: Int, occupation: List[String], spouse: List[String],
                        content: String)
 
+case class Tweet(id: String, date: String, message: String)
+
+case class TwitterProfile(id: String, name: String, nickname: String, followers: List[String],
+                          following: List[String], tweets: List[Tweet])
+
 
 object Socialinfo {
   val baseInput = "file:/home/silverbaq/Documents/BJTU/Project2/twitter-stmo/"
   val baseInput2 = "file:/home/silverbaq/Documents/BJTU/Project2/wiki_imdb-stmo/"
 
   val relationFile = baseInput + "relations2.txt"
-  val twitterProfile = baseInput + "profiles.txt"
-  val tweets = baseInput + "tweets.txt"
+  val twitterProfileInput = baseInput + "profiles.txt"
+  val tweetsInput = baseInput + "tweets.txt"
 
   val imdbBasicInfoInput = baseInput2 + "imdb_basic_output.txt"
   val imdbAdditionInfoInput = baseInput2 + "imdb_content_output.txt"
@@ -48,6 +53,7 @@ object Socialinfo {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("Socialinfo")
       .setMaster("local[2]")
+      .set("spark.executor.memory", "2g")
     val sc = new SparkContext(conf)
 
 
@@ -63,6 +69,9 @@ object Socialinfo {
     val basicImdb = spark.read.json(imdbBasicInfoInput)
     val imdbAddition = spark.read.json(imdbAdditionInfoInput)
 
+    val twitterData = spark.read.json(twitterProfileInput).collect()
+    val tweetsData = spark.read.json(tweetsInput).collect()
+    val relationsData = sc.textFile(relationFile).map(_.split(" ")).collect()
 
     val wikiData = basicWiki.join(additionalWiki, Seq("id"))
     val wikiCollection = wikiData.collect()
@@ -74,12 +83,16 @@ object Socialinfo {
     // Binding all the information
     val profiles = ranks.map(x => {
 
-      // IMDB Profile
-      val imdb = imdbCollection.filter(a => a(0).equals(x._1.toString)) //"Steve Wozniak"
+      var imdbProfile: IMDBProfile = null
+      var wikiProfile: WikiProfile = null
+      var twitterProfile: TwitterProfile = null
 
+
+      // IMDB Profile
+      val imdb = imdbCollection.filter(a => a(0).equals(x._1.toString))
       if (imdb.length > 0) {
-        val imdbProfile = imdb.map(a => {
-          new IMDBProfile(
+        imdb.map(a => {
+          imdbProfile = new IMDBProfile(
             id = a(0).toString,
             name = a(4).toString,
             birthday = a(1).toString,
@@ -89,18 +102,15 @@ object Socialinfo {
             spouse = a(6).asInstanceOf[mutable.WrappedArray[String]].toList,
             content = a(7).toString
           )
-        }) take 1
+        })
 
-      } else {
-        val imdbProfile = null
       }
 
       // Wikipedia Profile
       val wiki = wikiCollection.filter(a => a(0).equals(x._1.toString))
-
-      if (wiki.length > 0){
-        val wikiProfile = wiki.map(a => {
-          new WikiProfile(
+      if (wiki.length > 0) {
+        wiki.map(a => {
+          wikiProfile = new WikiProfile(
             id = a(0).toString,
             birthday = a(1).toString,
             children = if (a(2).toString.equals("")) 0 else a(2).toString.toInt,
@@ -116,13 +126,34 @@ object Socialinfo {
             url = a(12).toString
           )
           //println(a)
-        }) take 1
+        })
         val test = ""
-
-      } else {
-        val wikiProfile = null
       }
 
+
+      // Twitter Profile
+      val twitter = twitterData.filter(a => a.getAs("id").equals(x._1.toString))
+
+      if (twitter.length > 0) {
+        val tweets = tweetsData.filter(a => a.getAs("twitterId").equals(x._1.toString)).map(a => new Tweet(a.getAs("id").toString, a.getAs("date").toString, a.getAs("message").toString)).toList
+        val following = relationsData.filter(a => a.length > 1).filter(a => a(0).equals(x._1.toString)).flatMap(a => a).filter(a => !a.equals(x._1.toString)).toList
+        val followers = relationsData.filter(a => a.length > 1).filter(a => a(1).equals(x._1.toString)).flatMap(a => a).filter(a => !a.equals(x._1.toString)).toList
+
+
+        twitter.map(a => {
+          twitterProfile = new TwitterProfile(
+            id = a.getAs("id"),
+            name = a.getAs("name"),
+            nickname = a.getAs("nickname"),
+            followers = followers,
+            following = following,
+            tweets = tweets
+          )
+        })
+        val test = ""
+      }
+
+      //createFinalProfile(imdbProfile, wikiProfile, twitterProfile)
 
     }).collect()
 
@@ -155,4 +186,14 @@ object Socialinfo {
     */
     sc.stop()
   }
+
+  def writeProfileToDatabas(profile: Profile): Unit = {
+    ???
+  }
+
+  def createFinalProfile(imdb: IMDBProfile, wiki: WikiProfile, twitter: TwitterProfile): Profile = {
+    ???
+  }
+
+
 }
