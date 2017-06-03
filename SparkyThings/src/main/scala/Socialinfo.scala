@@ -119,7 +119,7 @@ object Socialinfo {
             mother = a(5).toString,
             name = a(6).toString,
             occupation = if (a(7) == null) null else a(7).asInstanceOf[mutable.WrappedArray[String]].toList,
-            spouse = null, //a(8).asInstanceOf[mutable.WrappedArray[Any]].map(b => b.toString).toList, // WrappedArray([Peggy Lentz<br />,1967,1974,end=divorced,marriage], [Mary Fisk<br />,1977,1987,end=divorced,marriage], [[[Mary Sweeney]]<br />,2006,2006,end=divorced,marriage], [Emily Stofle<br />,February 2009,null,null,marriage])
+            spouse = if (a(8) == null) null else a(8).asInstanceOf[mutable.WrappedArray[Any]].map(b => b.toString.split(",")(0).replace("<br />","").replace("[","").replace("]","")).toList, // WrappedArray([Peggy Lentz<br />,1967,1974,end=divorced,marriage], [Mary Fisk<br />,1977,1987,end=divorced,marriage], [[[Mary Sweeney]]<br />,2006,2006,end=divorced,marriage], [Emily Stofle<br />,February 2009,null,null,marriage])
             content = a(9).toString,
             images = a(10).asInstanceOf[mutable.WrappedArray[String]].toList,
             refs = a(11).asInstanceOf[mutable.WrappedArray[String]].toList,
