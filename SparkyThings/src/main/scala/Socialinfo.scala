@@ -13,12 +13,12 @@ import scala.collection.mutable
   * Created by silverbaq on 5/16/17.
   */
 
-case class Profile(id: Int, name: String, birthday: String, death: String,
-                   children: Int, mother: String, Father: String,
-                   followers: List[Int], following: List[Int], pageRank: Double,
+case class Profile(id: String, name: String, birthday: String, death: String,
+                   children: Int, mother: String, father: String,
+                   followers: List[String], following: List[String], pageRank: Double,
                    occupation: List[String], spouse: List[String],
                    wiki_content: String, imdb_content: String, images: List[String],
-                   refs: List[String], wiki_url: String, tweets: List[String])
+                   refs: List[String], wiki_url: String, tweets: List[Tweet])
 
 case class WikiProfile(id: String, birthday: String, children: Int, death: String,
                        father: String, mother: String, name: String,
@@ -53,7 +53,7 @@ object Socialinfo {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setAppName("Socialinfo")
       .setMaster("local[2]")
-      .set("spark.executor.memory", "2g")
+      .set("spark.executor.memory", "8g")
     val sc = new SparkContext(conf)
 
 
@@ -133,7 +133,6 @@ object Socialinfo {
 
       // Twitter Profile
       val twitter = twitterData.filter(a => a.getAs("id").equals(x._1.toString))
-
       if (twitter.length > 0) {
         val tweets = tweetsData.filter(a => a.getAs("twitterId").equals(x._1.toString)).map(a => new Tweet(a.getAs("id").toString, a.getAs("date").toString, a.getAs("message").toString)).toList
         val following = relationsData.filter(a => a.length > 1).filter(a => a(0).equals(x._1.toString)).flatMap(a => a).filter(a => !a.equals(x._1.toString)).toList
@@ -150,10 +149,13 @@ object Socialinfo {
             tweets = tweets
           )
         })
-        val test = ""
       }
 
-      //createFinalProfile(imdbProfile, wikiProfile, twitterProfile)
+
+      if (twitter.length > 0) {
+        val p = createFinalProfile(imdbProfile, wikiProfile, twitterProfile, x._2)
+        val test = ""
+      }
 
     }).collect()
 
@@ -191,9 +193,57 @@ object Socialinfo {
     ???
   }
 
-  def createFinalProfile(imdb: IMDBProfile, wiki: WikiProfile, twitter: TwitterProfile): Profile = {
-    ???
+  def createFinalProfile(imdb: IMDBProfile, wiki: WikiProfile, twitter: TwitterProfile, pageRank: Double): Profile = {
+    var p: Profile = null
+
+    if (imdb != null && wiki != null) {
+      p = new Profile(id = twitter.id, name = twitter.name, birthday = checkString(wiki.birthday, imdb.birthday),
+        death = checkString(wiki.death, imdb.death), children = checkNumber(wiki.children, imdb.children).toInt,
+        mother = wiki.mother, father = wiki.mother, followers = twitter.followers, following = twitter.following,
+        pageRank = pageRank, occupation = checkList(wiki.occupation, imdb.occupation),
+        spouse = checkList(wiki.spouse, imdb.spouse), wiki_content = wiki.content, imdb_content = imdb.content,
+        images = wiki.images, refs = wiki.refs, wiki_url = wiki.url, tweets = twitter.tweets)
+    } else if (wiki == null && imdb != null) {
+      p = new Profile(id = twitter.id, name = twitter.name, birthday = imdb.birthday,
+        death = imdb.death, children = imdb.children,
+        mother = "", father = "", followers = twitter.followers, following = twitter.following,
+        pageRank = pageRank, occupation = imdb.occupation,
+        spouse = imdb.spouse, wiki_content = "", imdb_content = imdb.content,
+        images = List[String](), refs = List[String](), wiki_url = "", tweets = twitter.tweets)
+    } else if (wiki != null && imdb == null) {
+      p = new Profile(id = twitter.id, name = twitter.name, birthday = wiki.birthday,
+        death = wiki.death, children = wiki.children,
+        mother = wiki.mother, father = wiki.mother, followers = twitter.followers, following = twitter.following,
+        pageRank = pageRank, occupation = wiki.occupation,
+        spouse = wiki.spouse, wiki_content = wiki.content, imdb_content = "",
+        images = wiki.images, refs = wiki.refs, wiki_url = wiki.url, tweets = twitter.tweets)
+    } else {
+      p = new Profile(id = twitter.id, name = twitter.name, birthday = "",
+        death = "", children = 0,
+        mother = "", father = "", followers = twitter.followers, following = twitter.following,
+        pageRank = pageRank, occupation = List[String](),
+        spouse = List[String](), wiki_content = "", imdb_content = "",
+        images = List[String](), refs = List[String](), wiki_url = "", tweets = twitter.tweets)
+    }
+    return p
   }
 
+  def checkString(current: String, x: String): String = x match {
+    case "" => current
+    case _ => x
+  }
+
+  def checkNumber(current: Double, x: Double): Double = {
+    if (current > x) current
+    else x
+  }
+
+  def checkList(current: List[String], x: List[String]): List[String] = current match {
+    case null => x
+    case _ => {
+      val l = x.filter(a => !current.contains(a))
+      l ::: current
+    }
+  }
 
 }
