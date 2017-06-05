@@ -119,7 +119,7 @@ object Socialinfo {
             mother = a(5).toString,
             name = a(6).toString,
             occupation = if (a(7) == null) null else a(7).asInstanceOf[mutable.WrappedArray[String]].toList,
-            spouse = if (a(8) == null) null else a(8).asInstanceOf[mutable.WrappedArray[Any]].map(b => b.toString.split(",")(0).replace("<br />","").replace("[","").replace("]","")).toList, // WrappedArray([Peggy Lentz<br />,1967,1974,end=divorced,marriage], [Mary Fisk<br />,1977,1987,end=divorced,marriage], [[[Mary Sweeney]]<br />,2006,2006,end=divorced,marriage], [Emily Stofle<br />,February 2009,null,null,marriage])
+            spouse = if (a(8) == null) null else a(8).asInstanceOf[mutable.WrappedArray[Any]].map(b => b.toString.split(",")(0).replace("<br />", "").replace("[", "").replace("]", "")).toList, // WrappedArray([Peggy Lentz<br />,1967,1974,end=divorced,marriage], [Mary Fisk<br />,1977,1987,end=divorced,marriage], [[[Mary Sweeney]]<br />,2006,2006,end=divorced,marriage], [Emily Stofle<br />,February 2009,null,null,marriage])
             content = a(9).toString,
             images = a(10).asInstanceOf[mutable.WrappedArray[String]].toList,
             refs = a(11).asInstanceOf[mutable.WrappedArray[String]].toList,
@@ -151,11 +151,12 @@ object Socialinfo {
         })
       }
 
-
+      // Creating final profile and writting it to DB
       if (twitter.length > 0) {
         val p = createFinalProfile(imdbProfile, wikiProfile, twitterProfile, x._2)
-        val test = ""
+        writeProfileToDatabase(p)
       }
+
 
     }).collect()
 
@@ -189,8 +190,8 @@ object Socialinfo {
     sc.stop()
   }
 
-  def writeProfileToDatabas(profile: Profile): Unit = {
-    ???
+  def writeProfileToDatabase(profile: Profile): Unit = {
+    DBConnection.writeProfile(profile)
   }
 
   def createFinalProfile(imdb: IMDBProfile, wiki: WikiProfile, twitter: TwitterProfile, pageRank: Double): Profile = {
