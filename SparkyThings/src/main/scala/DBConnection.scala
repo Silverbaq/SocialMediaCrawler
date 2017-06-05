@@ -13,8 +13,6 @@ object DBConnection {
   var connection: Connection = _
 
 
-
-
   def selectTest: Unit = {
     try {
       Class.forName(driver)
@@ -32,18 +30,17 @@ object DBConnection {
     connection.close
   }
 
-  def test2(): Unit ={
+  def test2(): Unit = {
 
-    val id1= "123123123123123"
-    val id2= "123123123123123"
+    val id1 = "123123123123123"
+    val id2 = "123123123123123"
 
     try {
       Class.forName(driver)
       connection = DriverManager.getConnection(url, username, password)
       val statement = connection.createStatement
       val rs = statement.executeUpdate("INSERT INTO `Persona`.`Follower`(`FollowerID`,`FollowingID`)" +
-        "VALUES('"+id1+"','"+id2+"');")
-
+        "VALUES('" + id1 + "','" + id2 + "');")
 
 
     } catch {
@@ -55,15 +52,14 @@ object DBConnection {
 
   def writeProfile(profile: Profile): Unit = {
     Class.forName(driver)
-    connection = DriverManager.getConnection(url, username, password)
 
 
     //DBConnection.insertProfile(profile.id, profile.name, "", profile.birthday, "", profile.father, profile.mother, profile.children, profile.death)
-   //DBConnection.insertSocialNetworkStatus(profile.id, profile.pageRank)
+    //DBConnection.insertSocialNetworkStatus(profile.id, profile.pageRank)
 
     //profile.spouse.foreach(s => DBConnection.insertSpouce(profile.id, s))
-    //profile.following.foreach(f => DBConnection.insertFollower(profile.id, f))
-    profile.following.foreach(f => DBConnection.insertFollower2(profile.id, f))
+    profile.following.foreach(f => DBConnection.insertFollower(profile.id, f))
+    //profile.following.foreach(f => DBConnection.insertFollower2(profile.id, f))
     //profile.followers.foreach(f => DBConnection.insertFollower(f, profile.id))
     //profile.images.foreach(i => DBConnection.insertPicture(profile.id, i))
     //profile.occupation.foreach(o => DBConnection.insertOccupation(profile.id, o))
@@ -71,7 +67,6 @@ object DBConnection {
     //profile.tweets.foreach(t => DBConnection.insertTweet(profile.id, t.message, t.date))
     println("Have inserted one")
 
-    connection.close()
 
   }
 
@@ -79,9 +74,7 @@ object DBConnection {
   def insertProfile(profileId: String, name: String, nickname: String, birthdate: String, gender: String, father: String, mother: String,
                     children: Int, deathDate: String): Unit = {
 
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
 
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`Profile`" +
@@ -101,15 +94,15 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertFollower(followerID: String, followingID: String): Unit = {
 
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
 
 
@@ -122,6 +115,8 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
@@ -135,7 +130,7 @@ object DBConnection {
       val statement = connection.createStatement
 
       val ps = statement.executeUpdate("INSERT INTO `Persona`.`Follower`(`FollowerID`,`FollowingID`)" +
-        "VALUES('"+ followerID +"','"+ followingID +"');")
+        "VALUES('" + followerID + "','" + followingID + "');")
 
 
     } catch {
@@ -145,9 +140,7 @@ object DBConnection {
   }
 
   def insertInfoContent(profileId: String, contentInfo: String): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`InfoContent`(`ProfileID`,`ContentInfo`)" +
         "VALUES(?,?);")
@@ -158,14 +151,14 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertOccupation(profileId: String, occupation: String): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
 
 
@@ -178,14 +171,14 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertPicture(profileId: String, link: String): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`Pictures`(`ProfileID`,`Link`)" +
         "VALUES(?,?);")
@@ -196,14 +189,14 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertSocialNetworkStatus(profileId: String, pagerank: Double): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
 
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`SocialNetworkStatus`(`ProfileID`,`PageRank`)" +
@@ -215,14 +208,14 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertTweet(profileId: String, tweet: String, postDate: String): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`Tweets`(`TweetContent`,`ProfileID`,`PostDate`)" +
         "VALUES(?,?,?);")
@@ -234,14 +227,14 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertReference(profileId: String, link: String): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`References`(`ProfileId`,`Url`)" +
         "VALUES(?,?);")
@@ -252,14 +245,14 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
 
   def insertSpouce(profileId: String, name: String): Unit = {
-    if (connection.isClosed) {
-      connection = DriverManager.getConnection(url, username, password)
-    }
+    connection = DriverManager.getConnection(url, username, password)
     try {
       val ps = connection.prepareStatement("INSERT INTO `Persona`.`Spouce`(`ProfileId'`,`Name`)" +
         "VALUES(?,?);")
@@ -270,6 +263,8 @@ object DBConnection {
 
     } catch {
       case e: Exception => e.printStackTrace
+    } finally {
+      connection.close()
     }
 
   }
