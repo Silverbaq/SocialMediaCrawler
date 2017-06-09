@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tweets</title>
+</head>
+<body>
+
+{% for t in tweets %}
+<div>
+    <label>{{t.PostDate}}</label>
+    <label>{{t.TweetContent}}</label>
+    <hr>
+    </hr>
+</div>
+{% endfor %}
+
+</body>
+</html>

@@ -23,25 +23,26 @@ intact. #}
     {%- endwith %}
 </div>
 
-<!-- Search Bar -->
+
 <div class="container" style="margin-bottom: 10px;">
     <div class="col-md-12">
-        <form action="" method="post">
-            <div class="col-md-10">
-                <input class="form-control" type="text" placeholder="Profile name" name="search">
+        {% for p in result %}
+        <a href="{{url_for('display_persona', id=p.profile.ProfileID)}}">
+            <div class="row">
+                <img src="{{p.image.Image}}" height="100px" width="75px">
+                <label>{{p.profile.Name}}</label>
+                <label>{{p.profile.ProfileID}}</label>
             </div>
-            <div class="col-md-2">
-                <input class="btn btn-primary" type="submit" value="Search">
-            </div>
-        </form>
+        </a>
+        {% endfor %}
     </div>
 </div>
 
-    <hr>
+<hr>
 
-    <footer>
-        <p>&copy; 2017 Silverbaq</p>
-    </footer>
+<footer>
+    <p>&copy; 2017 Silverbaq</p>
+</footer>
 </div> <!-- /container -->
 
 

@@ -1,0 +1,161 @@
+{# This simple template derives from ``base.html``. See ``base.html`` for
+more information about template inheritance. #}
+{%- extends "base.html" %}
+
+{# Loads some of the macros included with Flask-Bootstrap. We are using the
+utils module here to automatically render Flask's flashed messages in a
+bootstrap friendly manner #}
+{% import "bootstrap/utils.html" as utils %}
+
+{# Inside the ``content`` is where you should place most of your own stuff.
+This will keep scripts at the page end and a navbar you add on later
+intact. #}
+{% block content %}
+<div class="container">
+    {%- with messages = get_flashed_messages(with_categories=True) %}
+    {%- if messages %}
+    <div class="row">
+        <div class="col-md-12">
+            {{utils.flashed_messages(messages)}}
+        </div>
+    </div>
+    {%- endif %}
+    {%- endwith %}
+</div>
+
+<!-- Search Bar -->
+<div class="container" style="margin-bottom: 10px;">
+    <div class="col-md-12">
+        <form action="/" method="post">
+            <div class="col-md-10">
+                <input class="form-control" type="text" placeholder="Profile name" name="search">
+            </div>
+            <div class="col-md-2">
+                <input class="btn btn-primary" type="submit" value="Search">
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-md-4">
+            {% if persona.profile_image %}
+            <img height="300" src="{{ persona.profile_image.Image }}">
+            {% else %}
+            <img height="300" src="{{ url_for('static', filename='images/no-photo.jpg') }}">
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <h2>Basic Information</h2>
+            <div class="col-md-2">
+                <div class="row"><label>Name</label></div>
+                <div class="row"><label>Birthday</label></div>
+                <div class="row"><label>Day of death</label></div>
+                <div class="row"><label>Gender</label></div>
+                <div class="row"><label>Father</label></div>
+                <div class="row"><label>Mother</label></div>
+                <div class="row"><label>Children</label></div>
+                <div class="row"><label>Nickname</label></div>
+                <div class="row"><label>Spouse</label></div>
+            </div>
+            <div class="col-md-10">
+                <div class="row"><label>: {{ persona.profile.Name }}</label></div>
+                <div class="row"><label>: {{ persona.profile.BirthDate }}</label></div>
+                <div class="row"><label>: {{ persona.profile.DeathDate }}</label></div>
+                <div class="row"><label>: {{ persona.profile.Gender }}</label></div>
+                <div class="row"><label>: {{ persona.profile.Father }}</label></div>
+                <div class="row"><label>: {{ persona.profile.Mother }}</label></div>
+                <div class="row"><label>: {{ persona.profile.Children }}</label></div>
+                <div class="row"><label>: {{ persona.profile.NickName }}</label></div>
+
+                {% for s in persona.spouse %}
+                <div class="row"><label>: {{s.Name}}</label></div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="md-12">
+            <div class="col-md-6 text-center">
+                <h2>Occupation</h2>
+                {% for o in persona.occupations %}
+                <div class="row"><label>{{o.Occupation}}</label></div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+        <div class="col-md-6 text-center">
+            <h3>Photos</h3>
+            <div class="row text-center">
+                {% for image in persona.pictures %}
+                <a href="{{image.Link}}">
+                    <img src="{{image.Link}}" height="100px" width="75"/>
+                </a>
+                {% endfor %}
+            </div>
+
+
+        </div>
+        <div class="col-md-4 text-center">
+
+
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h3>Social Network</h3>
+        <div class="row text-center">Page Rank: {{persona.social_network_status.PageRank}}</div>
+        <div class="col-md-6">
+            <h3>Social media posts</h3>
+            <a href="{{url_for('show_tweets', id=persona.profile.ProfileID)}}" target="_blank">Show Tweets</a>
+        </div>
+
+        <div class="col-md-6">
+        <h3>Connections</h3>
+            <div class="col-md-6 text-center">
+                <h3>Followers</h3>
+                <div class="row text-center">{{persona.followers}}</div>
+            </div>
+            <div class="col-md-6 text-center">
+                <h3>Following</h3>
+                <div class="row text-center">{{persona.following}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="col-md-6 text-center">
+            <h2>References</h2>
+            {% for r in persona.references %}
+            <div class="row"><a href="{{r.Url}}">{{r.Url}}</a></div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-6 text-center">
+            <h2>Content</h2>
+            <div class="row"><label>{{persona.content.ContentInfo}}</label></div>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<footer>
+    <p>&copy; 2017 Silverbaq</p>
+</footer>
+</div> <!-- /container -->
+
+
+{%- endblock %}
