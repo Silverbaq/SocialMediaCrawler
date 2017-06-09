@@ -32,16 +32,27 @@ intact. #}
                 <th>Profile</th>
                 <th>Page Rank</th>
             </tr>
+            {% for i in range(0,100) %}
+            <tr>
+                <td>{{ i+1 }}</td>
+                <td><a href="{{url_for('display_persona', id=rankers[i].Profile.ProfileID)}}">
+                    {{ rankers[i].Profile.Name }}
+                </a>
+                </td>
+
+                <td>{{ rankers[i].PageRank }}</td>
+            </tr>
+            {% endfor %}
 
         </table>
     </div>
 </div>
 
-    <hr>
+<hr>
 
-    <footer>
-        <p>&copy; 2017 Silverbaq</p>
-    </footer>
+<footer>
+    <p>&copy; 2017 Silverbaq</p>
+</footer>
 </div> <!-- /container -->
 
 

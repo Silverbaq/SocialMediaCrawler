@@ -42,7 +42,10 @@ def get_persona(id):
         return None
     content_info = session.query(InfoContent).filter_by(ProfileID=profile.ProfileID).first()
     #make text displayable
-    content_info.ContentInfo = code_or_remove(content_info.ContentInfo)
+    if content_info is not None:
+        content_info.ContentInfo = code_or_remove(content_info.ContentInfo)
+    else:
+        content_info = ''
 
     profile_occupation = session.query(ProfileOccupation).filter_by(Profile=profile).all()
     reference = session.query(Reference).filter_by(Profile=profile).all()
@@ -80,6 +83,22 @@ def get_tweets(id):
         result.append(t)
 
     return result
+
+def get_top_pagerankers():
+    engine = create_engine('mysql://root:123456@127.0.0.1/Persona')
+    engine.connect()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    socials= session.query(SocialNetworkStatus).all()
+
+    sorted_socials = sorted(socials, key=lambda r:r.PageRank, reverse=True)[:100]
+
+    for n in sorted_socials:
+        n.Profile.Name = code_or_remove(n.Profile.Name)
+
+    return sorted_socials
+
 
 def code_or_remove(text):
     result = ''

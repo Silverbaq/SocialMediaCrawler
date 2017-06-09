@@ -34,7 +34,8 @@ def index():
 
 @app.route('/top', methods=['GET'])
 def top():
-    return render_template('top.html')
+    rankers = get_top_pagerankers()
+    return render_template('top.html', rankers=rankers)
 
 
 def select_persona(result):
