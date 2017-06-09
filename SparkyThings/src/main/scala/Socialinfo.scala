@@ -1,10 +1,7 @@
-import java.lang.NullPointerException
-
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.graphx.GraphLoader
-import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql._
+import org.apache.spark.sql.{SparkSession}
+
 
 import scala.collection.mutable
 
@@ -37,10 +34,11 @@ case class TwitterProfile(id: String, name: String, nickname: String, followers:
 
 
 object Socialinfo {
+                /* *** INSERT FILE PATH HERE *** */
   val baseInput = "file:/home/silverbaq/Documents/BJTU/Project2/twitter-stmo/"
   val baseInput2 = "file:/home/silverbaq/Documents/BJTU/Project2/wiki_imdb-stmo/"
 
-  val relationFile = baseInput + "relations2.txt"
+  val relationFile = baseInput + "relations.txt"
   val twitterProfileInput = baseInput + "profiles.txt"
   val tweetsInput = baseInput + "tweets.txt"
 
@@ -161,32 +159,6 @@ object Socialinfo {
     }).collect()
 
 
-    /*
-    // Find followers of the user
-    // val followers = graph.edges.filter(a => a.dstId == top100Id).map(a => a.srcId)
-    val followersRDD = sc.textFile(relationInput).map(_.split("\t")).filter(a => a.length > 1).filter(a => a(1).equals(top100Id.toString))
-
-    // Clean/flatMap and make to array
-    val followers = followersRDD.flatMap(a => a).filter(a => !a.equals(top100Id.toString)).collect()
-
-    // Read the weibo file as a table
-    val weiboTable = sc.textFile(weiboInput).map(_.split("\t")).filter(a => a.length > 5)
-
-    // Get comments from all the followers, and save them in individual files
-    followers.map { id =>
-
-      // maps the userId and the comments of a user.
-      // then only returns the comments that match the THIS user
-      val something = weiboTable.map(a => (a(1), a(5))).filter(a => a._1.equals(id)).map(a => a._2)
-
-      val some = something.collect()
-
-
-      if (!some.isEmpty)
-        something.saveAsTextFile("file:/home/silverbaq/Downloads/weibo/top100/" + id)
-
-    }
-    */
     sc.stop()
   }
 
