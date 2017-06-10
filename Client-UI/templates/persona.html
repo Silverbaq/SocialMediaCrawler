@@ -122,14 +122,7 @@ intact. #}
 
         <div class="col-md-6">
         <h3>Connections</h3>
-            <div class="col-md-6 text-center">
-                <h3>Followers</h3>
-                <div class="row text-center">{{persona.followers}}</div>
-            </div>
-            <div class="col-md-6 text-center">
-                <h3>Following</h3>
-                <div class="row text-center">{{persona.following}}</div>
-            </div>
+            <a href="{{url_for('connections', id=persona.profile.ProfileID)}}" target="_blank">Show connections</a>
         </div>
     </div>
 </div>

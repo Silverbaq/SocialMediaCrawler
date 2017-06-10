@@ -99,6 +99,19 @@ def get_top_pagerankers():
 
     return sorted_socials
 
+def get_followers_and_following(profile_id):
+    engine = create_engine('mysql://root:123456@127.0.0.1/Persona')
+    engine.connect()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    followers = session.query(Follower).filter_by(FollowingID=profile_id).count()
+    following = session.query(Follower).filter_by(FollowerID=profile_id).count()
+
+    session.close()
+    engine.dispose()
+
+    return {'following': following, 'followers': followers}
 
 def code_or_remove(text):
     result = ''

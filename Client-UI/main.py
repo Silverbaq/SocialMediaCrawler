@@ -57,6 +57,13 @@ def show_tweets():
     tweets = get_tweets(id)
     return render_template('tweets.html', tweets=tweets)
 
+
+@app.route('/connections')
+def connections():
+    id = request.args.get('id')
+    connections = get_followers_and_following(id)
+    return render_template('connections.html', connections=connections)
+
 if __name__ == "__main__":
     app.secret_key = "this_is_a_secret"
     app.run()

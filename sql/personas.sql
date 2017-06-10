@@ -30,7 +30,7 @@ CREATE TABLE `Follower` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`ID`),
   KEY `FollowerID` (`FollowerID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10789 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67511839 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,11 +43,11 @@ DROP TABLE IF EXISTS `InfoContent`;
 CREATE TABLE `InfoContent` (
   `ContentID` int(11) NOT NULL AUTO_INCREMENT,
   `ProfileID` varchar(255) NOT NULL,
-  `ContentInfo` text NOT NULL,
+  `ContentInfo` longtext CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`ContentID`),
   KEY `fk_InfoContent_1_idx` (`ProfileID`),
   CONSTRAINT `fk_InfoContent_1` FOREIGN KEY (`ProfileID`) REFERENCES `Profile` (`ProfileID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10451 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `Pictures` (
   PRIMARY KEY (`PictureID`),
   KEY `fk_Pictures_1_idx` (`ProfileID`),
   CONSTRAINT `fk_Pictures_1` FOREIGN KEY (`ProfileID`) REFERENCES `Profile` (`ProfileID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2830900 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +89,23 @@ CREATE TABLE `Profile` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `ProfileImage`
+--
+
+DROP TABLE IF EXISTS `ProfileImage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProfileImage` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ProfileID` varchar(255) NOT NULL,
+  `Image` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `fk_ProfileImage_1_idx` (`ProfileID`),
+  CONSTRAINT `fk_ProfileImage_1` FOREIGN KEY (`ProfileID`) REFERENCES `Profile` (`ProfileID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=36349 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `ProfileOccupation`
 --
 
@@ -103,7 +120,7 @@ CREATE TABLE `ProfileOccupation` (
   KEY `OccupationID` (`Occupation`),
   KEY `fk_ProfileOccupation_1_idx` (`ProfileID`),
   CONSTRAINT `fk_ProfileOccupation_1` FOREIGN KEY (`ProfileID`) REFERENCES `Profile` (`ProfileID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2401 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -115,12 +132,11 @@ DROP TABLE IF EXISTS `References`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `References` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `ProfileId` varchar(255) NOT NULL,
-  `Url` varchar(255) NOT NULL,
+  `ProfileId` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `Url` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`Id`),
-  KEY `fk_References_1_idx` (`ProfileId`),
-  CONSTRAINT `fk_References_1` FOREIGN KEY (`ProfileId`) REFERENCES `Profile` (`ProfileID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  KEY `fk_References_1_idx` (`ProfileId`)
+) ENGINE=InnoDB AUTO_INCREMENT=88713 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +170,7 @@ CREATE TABLE `Spouce` (
   PRIMARY KEY (`SpouceId`),
   KEY `fk_Spouce_1_idx` (`ProfileId`),
   CONSTRAINT `fk_Spouce_1` FOREIGN KEY (`ProfileId`) REFERENCES `Profile` (`ProfileID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=258 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,13 +181,11 @@ DROP TABLE IF EXISTS `Tweets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Tweets` (
-  `TweetID` int(11) NOT NULL AUTO_INCREMENT,
-  `TweetContent` text NOT NULL,
-  `ProfileID` varchar(255) NOT NULL,
-  `PostDate` varchar(255) NOT NULL,
-  PRIMARY KEY (`TweetID`),
-  KEY `fk_Tweets_1_idx` (`ProfileID`),
-  CONSTRAINT `fk_Tweets_1` FOREIGN KEY (`ProfileID`) REFERENCES `Profile` (`ProfileID`) ON DELETE CASCADE ON UPDATE CASCADE
+  `TweetID` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `TweetContent` text CHARACTER SET utf8 NOT NULL,
+  `ProfileID` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `PostDate` varchar(255) CHARACTER SET utf8 NOT NULL,
+  PRIMARY KEY (`TweetID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -184,4 +198,4 @@ CREATE TABLE `Tweets` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-06-05 19:52:30
+-- Dump completed on 2017-06-09 13:42:39

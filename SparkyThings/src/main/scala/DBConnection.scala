@@ -8,7 +8,7 @@ object DBConnection {
   val url = "jdbc:mysql://localhost:3306/mysql"
   val driver = "com.mysql.jdbc.Driver"
   val username = "root"
-  val password = "123456"
+  val password = "had00p"
   var connection: Connection = _
 
   def writeProfile(profile: Profile): Unit = {
